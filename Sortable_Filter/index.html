@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sortable</title>
+
+    <style>
+        body {
+            padding: 20px;
+            margin: auto;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 10px;
+        }
+
+        .btn {
+            background-color: #5ca95c;
+            width: 8%;
+        }
+
+        table {
+            width: 100%;
+            border: 1px solid;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>Sortable and Filterable Table</h1>
+        <div class="form-container">
+            <input type="text" id="name" placeholder="Name">
+            <input type="number" id="age" placeholder="Age">
+            <input type="text" id="city" placeholder="City">
+            <button class="btn" onclick="addItem()">Add</button>
+        </div><br>
+        <input type="text" id="filterInput" placeholder="Search..." oninput="filterTable()">
+
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable('name')">Name</th>
+                    <th onclick="sortTable('age')">Age</th>
+                    <th onclick="sortTable('city')">City</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        let data = [];
+        let editIndex = -1;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const storedData = localStorage.getItem('tableData');
+            if (storedData) {   
+                data = JSON.parse(storedData);
+                renderTable();
+            }
+        });
+
+        // Function to add an item to the table
+        function addItem() {
+            const name = document.getElementById('name').value.trim();
+            const age = document.getElementById('age').value.trim();
+            const city = document.getElementById('city').value.trim();
+
+            if (!name || !age || !city) {
+                alert('All fields are required!');
+                return;
+            }
+
+            if (editIndex > -1) {
+                // Update existing item
+                data[editIndex] = { name, age: parseInt(age), city };
+                editIndex = -1;
+            } else {
+                // Add new item
+                data.push({ name, age: parseInt(age), city });
+                console.log(data); // name:venkat, age:id, city:hyderabad
+            }
+
+            localStorage.setItem('tableData', JSON.stringify(data));
+            clearInputs();
+            renderTable();
+        }
+
+        // Function to clear inputs
+        function clearInputs() {
+            document.getElementById('name').value = '';
+            document.getElementById('age').value = '';
+            document.getElementById('city').value = '';
+        }
+
+        // Function to render the table
+        function renderTable() {
+            const tbody = document.querySelector('#dataTable tbody');
+            tbody.innerHTML = '';
+
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+      <td>${item.name}</td>
+      <td>${item.age}</td>
+      <td>${item.city}</td>
+      <td>
+        <button onclick="editItem(${index})">Edit</button>
+        <button onclick="deleteItem(${index})">Delete</button>
+      </td>
+    `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Function to delete an item
+        function deleteItem(index) {
+            data.splice(index, 1);
+            localStorage.setItem('tableData', JSON.stringify(data));
+            renderTable();
+        }
+
+        // Function to edit an item
+        function editItem(index) {
+            const item = data[index];
+            document.getElementById('name').value = item.name;
+            document.getElementById('age').value = item.age;
+            document.getElementById('city').value = item.city;
+            editIndex = index;
+        }
+
+        // Function to filter the table
+        function filterTable() {
+            const filterValue = document.getElementById('filterInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#dataTable tbody tr');
+
+            rows.forEach(row => {
+                const cells = Array.from(row.querySelectorAll('td'));
+                const matches = cells.some(cell => cell.textContent.toLowerCase().includes(filterValue));
+                row.style.display = matches ? '' : 'none';
+            });
+        }
+
+        //Function to sortable 
+        function sortTable(column) {
+            // Check if we are sorting a numeric column
+            const isNumeric = column === "age";
+
+            // Toggle the sorting order (asc/desc)
+            if (sortConfig.column === age) {
+                sortConfig.order = sortConfig.order === "asc" ? "desc" : "asc";
+            } else {
+                sortConfig.column = column;
+                sortConfig.order = "asc";
+            }
+
+           
+                
+            
+
+            renderTable();
+        }
+
+
+
+    </script>
+</body>
+
+</html>

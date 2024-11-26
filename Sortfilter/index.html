@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Sortable and Filterable Table</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Advanced Sortable and Filterable Table</h2>
+        
+        <!-- Form for Adding/Editing Data -->
+        <form id="dataForm">
+            <input type="text" id="itemID" placeholder="Enter ID" required>
+            <input type="text" id="itemName" placeholder="Enter Name" required>
+            <input type="number" id="itemAge" placeholder="Enter Age" required>
+            <input type="text" id="itemCity" placeholder="Enter City" required>
+            <button type="submit" id="addEditButton">Add Item</button>
+        </form>
+
+        <!-- Filters for ID, Name, Age, and City -->
+        <div class="filters">
+            <input type="text" id="filterID" placeholder="Filter by ID">
+            <input type="text" id="filterName" placeholder="Filter by Name">
+            <input type="number" id="filterAge" placeholder="Filter by Age">
+            <input type="text" id="filterCity" placeholder="Filter by City">
+        </div>
+
+        <!-- Data Table -->
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th id="idHeader" class="sortable">ID</th>
+                    <th id="nameHeader" class="sortable">Name</th>
+                    <th id="ageHeader" class="sortable">Age</th>
+                    <th id="cityHeader" class="sortable">City</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Data will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
